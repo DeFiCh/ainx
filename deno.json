@@ -1,0 +1,14 @@
+{
+  "imports": {
+    "@esm/": "https://esm.sh/",
+    "@pkg/": "./pkg/",
+    "@std/assert": "jsr:@std/assert@^1.0.0",
+    "@std/async": "jsr:@std/async@^1.0.0",
+    "@std/cli": "jsr:@std/cli@^1.0.0",
+    "@std/collections": "jsr:@std/collections@^1.0.5",
+    "@std/expect": "jsr:@std/expect@^0.224.5",
+    "@std/fs": "jsr:@std/fs@^0.229.3",
+    "@std/path": "jsr:@std/path@^1.0.1",
+    "@x/": "https://deno.land/x/"
+  }
+}
