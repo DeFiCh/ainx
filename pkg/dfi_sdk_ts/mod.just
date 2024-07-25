@@ -5,19 +5,12 @@ install_dir := shell("echo $WORKSPACE_OUT")
 _default:
     just --list --justfile {{ source_file() }}
 
-build:
-    deno compile --output={{ install_dir }}/bin/ -A main.ts 
-
-run *args:
-    deno run -A main.ts {{ args }}
+build: lint
 
 fmt:
     deno fmt
 
 lint:
-    deno check ./main.ts && deno fmt --check
+    deno check ./lib.ts && deno fmt --check
 
-install: build
-
-clean: 
-    rm -f {{ install_dir }}/bin/{{ pkg_id }}
+clean:

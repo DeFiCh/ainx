@@ -4,19 +4,25 @@ The monorepo for everything going forward
 
 ## Notes
 
-### `just` Common Conventions
+### `just` Conventions
 
 - `just`: List all available tasks
 - `just --list`: List all tasks including sub-modules
-- `just <project>`: List project's sub-tasks.
-- `just <project>::run`: Run `<project>` with default args.
+- `just <project>`: List project's sub-tasks
 - `just <project>::build`: Build `<project>`
+- `just <project>::clean`: Clean-up `<project>`
+- `just <project>::run`: Run `<project>` with default args
 - `just <project>::fmt`: Format `<project>`
 - `just <project>::lint`: Lint `<project>`
 - `just <project>::install`: Install `<project>` into output sysroot (`.out/`)
 
 Read about [just](https://github.com/casey/just) here. We use it as the common _task_ runner and to specify dependency
-rules across projects. Note that just is _not_ a build system like make is, but fixes all other issues with make.
+rules across projects.
+
+Note that just is very minimal, _not_ a build system like make is, but fixes all other issues with make. Use it to
+automate most as many tasks as possible and such that the above conventions are upheld and any pre-requisite, be it
+fetching, building, bundling, cleaning up after yourself are taken care of implicitly.
+
 We use project native build systems (cmake for C++, cargo for Rust, deno on it's own, etc) both to be able to keep
 learning curve low instead of bazel / buck, etc and also to build projects as it's designed to be with native tooling.
 `just` is just task running wrapper around to create common conventions. Use it to wrap native build system such

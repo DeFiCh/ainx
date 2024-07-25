@@ -23,3 +23,6 @@ lint:
     deno check ./main.ts && deno fmt --check
 
 install: build
+
+clean: 
+    rm -f {{ install_dir }}/bin/{{ pkg_id }}
