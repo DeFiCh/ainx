@@ -45,12 +45,22 @@ that any team can build, run and reuse any projects with the common conventions.
 
 - `.build`:
   - This is the build dir where all the build artifacts or intermediate / temporary artifacts go.
+  - For build systems that auto manage workspaces with different projects (like cargo), redirect the build system
+    to use it's own dir inside (eg: `.build/target` for rust projects)
+  - For projects that needs it's own, create a dir inside with the project name  (same as inside `pkg` dir) and 
+    everything should be inside this dir unless shared between projects for which create your own namespace inside.
+    (Eg: `examples/cpp_project` -> `.build/cpp_project`)
 - `.out`:
   - This a final sysroot of the output only. This is equivalent to the `install` of coming from makefiles.
     This is also how the layout on a final install on user system should look like.
     - `.out/bin`: All of the executable binaries go here. Add this to the path for easy access.
-    - `.out/lib`: All of the shared / dynamic libs go here. Add this to the LD_LIBRARY_PATH for easy local access.
-      Cross-linking between projects search for it here.
+      - Note that all bins are layout flat here.
+      - Keep your project names for the final output. Do not collide with other projects.
+    - `.out/lib`: All of the shared / dynamic libs go here.
+      - Add this to the LD_LIBRARY_PATH for easy local access.
+      - For cross-linking between projects, it needs to be deployed here and this is the search dir.
+      - Do not collide with other projects. If multiple projects build the same dep, it needs to be a third_party
+        project on it's own or be built by the dep's own project, just add it to your dep in the just module.
     - `.out/include`: This is for output layout of include headers for software outside of the monorepo. For internal
       use, always directly consume it from WORKSPACE_ROOT relative path.
     - `.out/systemd`: Please provide systemd unit files for any service or long running self-managed processes like
