@@ -4,7 +4,7 @@ The monorepo for everything going forward
 
 ## Notes
 
-### `just` Conventions
+### `just` Common Conventions
 
 - `just`: List all available tasks
 - `just --list`: List all tasks including sub-modules
@@ -14,6 +14,13 @@ The monorepo for everything going forward
 - `just <project>::fmt`: Format `<project>`
 - `just <project>::lint`: Lint `<project>`
 - `just <project>::install`: Install `<project>` into output sysroot (`.out/`)
+
+Read about [just](https://github.com/casey/just) here. We use it as the common _task_ runner and to specify dependency
+rules across projects. Note that just is _not_ a build system like make is, but fixes all other issues with make.
+We use project native build systems (cmake for C++, cargo for Rust, deno on it's own, etc) both to be able to keep
+learning curve low instead of bazel / buck, etc and also to build projects as it's designed to be with native tooling.
+`just` is just task running wrapper around to create common conventions. Use it to wrap native build system such
+that any team can build, run and reuse any projects with the common conventions.
 
 ### Structure
 
