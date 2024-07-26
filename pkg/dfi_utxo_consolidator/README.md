@@ -16,7 +16,12 @@ Options:
       --maxcount          Max number of utxos in one consolidation TX
 ```
 
+### Examples
+
+#### Consolidate funds in `dZcHjYhKtEM88TtZLjp314H2xZjkztXtRc`
+
+> `just {{ pkg_id }}::run --addr="dZcHjYhKtEM88TtZLjp314H2xZjkztXtRc" --maxcount=380 --minconf=20 --maxamount=50 --delay=5`
+
 ### Quick tasks
 
 - `just dfi_utxo_consolidator::run_cfp_addr`: To consolidate funds in the CFP address
-

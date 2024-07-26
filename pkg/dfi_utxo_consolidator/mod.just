@@ -31,4 +31,4 @@ run_cfp_addr:
     #!/bin/bash
     log_file={{ install_dir }}/var/log/{{ pkg_id }}/{{ datetime_utc("%F-u%s.log") }}
     mkdir -p $(dirname ${log_file})
-    just {{ pkg_id }}::run --addr="dZcHjYhKtEM88TtZLjp314H2xZjkztXtRc" --maxcount=380 --minconf=20 --maxamount=50 --delay=5 | tee ${log_file} 
+    just {{ pkg_id }}::run --addr="dZcHjYhKtEM88TtZLjp314H2xZjkztXtRc" --maxcount=380 --minconf=20 --maxamount=50 --delay=5 | tee ${log_file}
