@@ -20,7 +20,7 @@ Options:
 
 #### Consolidate funds in `dZcHjYhKtEM88TtZLjp314H2xZjkztXtRc`
 
-> `just {{ pkg_id }}::run --addr="dZcHjYhKtEM88TtZLjp314H2xZjkztXtRc" --maxcount=380 --minconf=20 --maxamount=50 --delay=5`
+`just dfi_utxo_consolidator::run --addr="dZcHjYhKtEM88TtZLjp314H2xZjkztXtRc" --maxcount=380 --minconf=20 --maxamount=50 --delay=5`
 
 ### Quick tasks
 
