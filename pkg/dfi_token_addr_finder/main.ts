@@ -17,7 +17,10 @@ function loadOpts() {
     string: ["filter"],
     boolean: ["help"],
     "--": false,
-    unknown: (args) => { console.log(`Error: unknown args: ${args}`); Deno.exit(1); },
+    unknown: (args) => {
+      console.log(`Error: unknown args: ${args}`);
+      Deno.exit(1);
+    },
   });
   const getHelpText = () => {
     let text =
