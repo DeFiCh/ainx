@@ -31,6 +31,8 @@ import {
   GetBlockResponseV2,
   GetBlockResponseV3,
   GetBlockResponseV4,
+  GetBlockStatsResponse,
+  GetNetworkInfoResponse,
   GetPoolPairResponse,
   GetTokenBalancesResponse,
   GetTokenBalancesResponseArray,
@@ -556,6 +558,50 @@ export class CliDriver {
     );
 
     return new TxHash(trimConsoleText(res));
+  }
+
+  async getAvgFeeRateFromStats(targetHeight: BlockHeight, pastSearchBlockNum: number = 100): Promise<number> {
+    let stats;
+    let h =  await this.getBlockHeight();
+    if (targetHeight.value < h.value) {
+      h = targetHeight;
+    }
+    let i = pastSearchBlockNum;
+    while (i > 0) {
+      stats = await this.getBlockStats(new BlockHeight(h.value - i));
+      if (stats.avgfeerate > 0) {
+        return 0.00000001 * stats.avgfeerate as number;
+      }
+      i--;
+    }
+    throw new Error("failed to estimate fee rate");
+  }
+
+  async getBlockStats(heightOrHash: BlockHeight | BlockHash): Promise<GetBlockStatsResponse> {
+    const res = await this.output(
+      "getblockstats",
+      heightOrHash.value.toString(),
+    );
+    return res.json();
+  }
+
+  async getNetworkInfo(): Promise<GetNetworkInfoResponse> {
+    const res = await this.output(
+      "getnetworkinfo",
+    );
+    return res.json();
+  }
+
+  async estimateSmartFee(blocksCountHintToConfirm: number = 1): Promise<{
+    feerate: number,
+    blocks: number,
+    errors?: string[],
+  }>{
+    const res = await this.output(
+      "estimatesmartfee",
+      blocksCountHintToConfirm.toString(),
+    );
+    return res.json();
   }
 
   async utxosToAccount(address: Address, amount: number, inputs?: { txid: string, vout: number }[]) {

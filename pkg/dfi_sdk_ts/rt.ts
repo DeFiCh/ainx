@@ -32,7 +32,7 @@ export class DenoRuntime {
       const err = new TextDecoder().decode(stderr);
       const out = new TextDecoder().decode(stdout);
       throw new Error(
-        `process code: ${code}, ${err}\n${out}}`,
+        `process code: ${code} \nargs: ${args}\n${err}\n${out}}`,
       );
     }
     return stdout;

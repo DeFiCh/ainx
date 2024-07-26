@@ -341,15 +341,78 @@ export interface GetTokenResponse {
 }
 
 export interface Unspent {
-    txid: string
-    vout: number
-    address: string
-    label: string
-    scriptPubKey: string
-    amount: number
-    confirmations: number
-    spendable: boolean
-    solvable: boolean
-    desc: string
-    safe: boolean
+  txid: string
+  vout: number
+  address: string
+  label: string
+  scriptPubKey: string
+  amount: number
+  confirmations: number
+  spendable: boolean
+  solvable: boolean
+  desc: string
+  safe: boolean
+}
+
+export interface GetBlockStatsResponse {
+  avgfee: number
+  avgfeerate: number
+  avgtxsize: number
+  blockhash: string
+  feerate_percentiles: number[]
+  height: number
+  ins: number
+  maxfee: number
+  maxfeerate: number
+  maxtxsize: number
+  medianfee: number
+  mediantime: number
+  mediantxsize: number
+  minfee: number
+  minfeerate: number
+  mintxsize: number
+  outs: number
+  subsidy: number
+  swtotal_size: number
+  swtotal_weight: number
+  swtxs: number
+  time: number
+  total_out: number
+  total_size: number
+  total_weight: number
+  totalfee: number
+  txs: number
+  utxo_increase: number
+  utxo_size_inc: number
+}
+
+
+export interface GetNetworkInfoResponse {
+  version: number;
+  subversion: string;
+  protocolversion: number;
+  localservices: string;
+  localrelay: boolean;
+  timeoffset: number;
+  networkactive: boolean;
+  connections: number;
+  networks: NetworkInfo[];
+  relayfee: number;
+  incrementalfee: number;
+  localaddresses: NetworkInfoLocalAddress[];
+  warnings: string;
+}
+
+export interface NetworkInfo {
+  name: string;
+  limited: boolean;
+  reachable: boolean;
+  proxy: string;
+  proxy_randomize_credentials: boolean;
+}
+
+export interface NetworkInfoLocalAddress {
+  address: string;
+  port: number;
+  score: number;
 }
