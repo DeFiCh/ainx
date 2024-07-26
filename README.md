@@ -54,17 +54,25 @@ that any team can build, run and reuse any projects with the common conventions.
   - This a final sysroot of the output only. This is equivalent to the `install` of coming from makefiles.
     This is also how the layout on a final install on user system should look like.
     - `.out/bin`: All of the executable binaries go here. Add this to the path for easy access.
-      - Note that all bins are layout flat here.
+      - Flat layout.
       - Keep your project names for the final output. Do not collide with other projects.
     - `.out/lib`: All of the shared / dynamic libs go here.
+      - Flat layout.
       - Add this to the LD_LIBRARY_PATH for easy local access.
       - For cross-linking between projects, it needs to be deployed here and this is the search dir.
       - Do not collide with other projects. If multiple projects build the same dep, it needs to be a third_party
         project on it's own or be built by the dep's own project, just add it to your dep in the just module.
-    - `.out/include`: This is for output layout of include headers for software outside of the monorepo. For internal
-      use, always directly consume it from WORKSPACE_ROOT relative path.
+    - `.out/etc`: Any config files and example format with defaults.
+      - Use a directory inside `etc/<project>/...`.
+    - `.out/share`: Any other arch data files, ideally architecture independent and portable.
+      - Use a directory inside `share/<project>/...`.
+    - `.out/include`: This is for output layout of include headers for software outside of the monorepo. 
+      - For internal use, always directly consume it from WORKSPACE_ROOT relative path.
+      - Use a directory inside `include/<project>/...`
     - `.out/systemd`: Please provide systemd unit files for any service or long running self-managed processes like
       microservices, web apps, web APIs, node etc.
+      - Flat layout.
+      - Prefix with `<project>-` - eg: `<project>-x.unit`
       - Infrastructure will consume services in one of two ways: systemd or K8s.
 
 ## Best practices
