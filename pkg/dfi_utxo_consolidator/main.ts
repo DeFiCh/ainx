@@ -84,9 +84,6 @@ async function main() {
     runs: 0,
   };
 
-  // TODO: Use estimatesmartfee to get this.
-  // const baseFee = 0.00001000;
-
   let txs;
   while (true) {
       console.log("step: collect UTXOs");
