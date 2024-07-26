@@ -4,12 +4,16 @@
     "specifiers": {
       "jsr:@std/cli": "jsr:@std/cli@1.0.0",
       "jsr:@std/cli@^1.0.0": "jsr:@std/cli@1.0.0",
+      "jsr:@std/encoding@^1.0.1": "jsr:@std/encoding@1.0.1",
       "npm:@types/node": "npm:@types/node@18.16.19",
       "npm:chalk": "npm:chalk@5.3.0"
     },
     "jsr": {
       "@std/cli@1.0.0": {
         "integrity": "3c38f1da21bff0d25a9e6d97139ef2eb9ba334b5910da92c0169b44f38655f08"
+      },
+      "@std/encoding@1.0.1": {
+        "integrity": "5955c6c542ebb4ce6587c3b548dc71e07a6c27614f1976d1d3887b1196cf4e65"
       }
     },
     "npm": {
@@ -27,6 +31,9 @@
     "https://esm.sh/ethers": "https://esm.sh/ethers@6.13.0"
   },
   "remote": {
+    "https://deno.land/std@0.224.0/encoding/_util.ts": "beacef316c1255da9bc8e95afb1fa56ed69baef919c88dc06ae6cb7a6103d376",
+    "https://deno.land/std@0.224.0/encoding/hex.ts": "6270f25e5d85f99fcf315278670ba012b04b7c94b67715b53f30d03249687c07",
+    "https://deno.land/x/sleep@v1.3.0/sleep.ts": "b6abaca093b094b0c2bba94f287b19a60946a8d15764d168f83fcf555f5bb59e",
     "https://esm.sh/ethers@6.13.0": "65f95c2d9bbd2bc2651ccd7863e86d1cb76b57fa4aedb1f8fc5db4a086a7db1c",
     "https://esm.sh/v135/@adraffy/ens-normalize@1.10.1/denonext/ens-normalize.mjs": "32a1f5e1ab2dbc99bd16efdfeee5ced3656d4b53ad059f2587d272c556110005",
     "https://esm.sh/v135/@noble/curves@1.2.0/denonext/_shortw_utils.js": "47a889dd52d7b29e8bc0d641597239d0ae0b1f10a9ee3b114c3dbd273172e9af",
@@ -67,6 +74,7 @@
       "jsr:@std/async@^1.0.0",
       "jsr:@std/cli@^1.0.0",
       "jsr:@std/collections@^1.0.5",
+      "jsr:@std/encoding@^1.0.1",
       "jsr:@std/expect@^0.224.5",
       "jsr:@std/fs@^0.229.3",
       "jsr:@std/path@^1.0.1"

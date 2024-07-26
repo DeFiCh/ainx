@@ -1,2 +1,3 @@
 mod examples
 mod dfi_token_addr_finder
+mod dfi_utxo_consolidator

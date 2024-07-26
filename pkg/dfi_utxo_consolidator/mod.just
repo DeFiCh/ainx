@@ -1,0 +1,31 @@
+pkg_id := replace_regex(source_directory(), ".*/", "")
+build_dir := shell("echo $WORKSPACE_BUILD")
+install_dir := shell("echo $WORKSPACE_OUT")
+
+_default:
+    just --list --justfile {{ source_file() }}
+
+deps:
+    just dfi_sdk_ts::lint
+
+build:
+    deno compile --output={{ install_dir }}/bin/ -A ./main.ts 
+
+run *args:
+    deno run -A ./main.ts {{ args }}
+
+fmt:
+    deno fmt
+
+lint:
+    deno check ./main.ts && deno fmt --check
+
+install: build
+
+clean: 
+    rm -f {{ install_dir }}/bin/{{ pkg_id }}
+
+# quick tasks
+
+run_cfp_addr: 
+    just dfi_utxo_consolidator::run --addr="dZcHjYhKtEM88TtZLjp314H2xZjkztXtRc" --maxcount=380 --minconf=20 --maxamount=50 --delay=5
