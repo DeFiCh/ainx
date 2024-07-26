@@ -6,15 +6,13 @@ _default:
     just --list --justfile {{ source_file() }}
 
 deps:
-    # make sure we specify the depenency for the graph even if 
-    # it doesn't require an explicit build
-    just examples::deno_project::lint
+    just dfi_sdk_ts::lint
 
 build:
-    deno compile --output={{ install_dir }}/bin/ -A main.ts 
+    deno compile --output={{ install_dir }}/bin/ -A ./main.ts 
 
 run *args:
-    deno run -A main.ts {{ args }}
+    deno run -A ./main.ts {{ args }}
 
 fmt:
     deno fmt
