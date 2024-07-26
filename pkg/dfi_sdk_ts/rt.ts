@@ -11,11 +11,12 @@ export class DenoRuntime {
   };
 
   async processRun(path: string, ...args: string[]) {
-    const cmd = new Deno.Command(path, { 
-      args, 
-      stdout: "null", 
-      stderr: "null", 
-      stdin: "null" });
+    const cmd = new Deno.Command(path, {
+      args,
+      stdout: "null",
+      stderr: "null",
+      stdin: "null",
+    });
     const { status } = await cmd.spawn();
     return await status;
   }

@@ -52,7 +52,7 @@ import { ListAccountsIndexedResponse } from "./resp.ts";
 export { ethers };
 
 export class Output {
-  constructor(private _buf: string) { }
+  constructor(private _buf: string) {}
 
   toString() {
     return this._buf;
@@ -81,10 +81,10 @@ export function trimConsoleText(str: string) {
 }
 
 interface IQueryOptions {
-  minimumAmount?: number,
-  maximumAmount?: number,
-  maximumCount?: number,
-  minimumSumAmount?: number,
+  minimumAmount?: number;
+  maximumAmount?: number;
+  maximumCount?: number;
+  minimumSumAmount?: number;
 }
 
 export class CliDriver {
@@ -270,7 +270,7 @@ export class CliDriver {
     const res = await this.outputString(
       "removepoolliquidity",
       from.value,
-      amount.toString()
+      amount.toString(),
     );
     return new TxHash(trimConsoleText(res));
   }
@@ -298,24 +298,37 @@ export class CliDriver {
   }
 
   async listTokens(
-    pagination: { start?: string, including_start?: boolean, limit?: number } = {},
+    pagination: { start?: string; including_start?: boolean; limit?: number } =
+      {},
     verbose: boolean = true,
   ): Promise<ListTokensResponse> {
-    const res = await this.output("listtokens", JSON.stringify(pagination), verbose.toString());
+    const res = await this.output(
+      "listtokens",
+      JSON.stringify(pagination),
+      verbose.toString(),
+    );
     return res.json() as ListTokensResponse;
   }
 
   async listAccounts(
-    pagination: { start?: string, including_start?: boolean, limit?: number } = {},
+    pagination: { start?: string; including_start?: boolean; limit?: number } =
+      {},
     indexedAmounts: boolean = false,
     isMineOnly: boolean = false,
   ): Promise<ListAccountsResponses> {
-    const cmdArgs = [JSON.stringify(pagination), false.toString(), indexedAmounts.toString(), isMineOnly.toString()];
+    const cmdArgs = [
+      JSON.stringify(pagination),
+      false.toString(),
+      indexedAmounts.toString(),
+      isMineOnly.toString(),
+    ];
     const res = await this.output("listaccounts", ...cmdArgs);
     const resJson = res.json();
     if (!indexedAmounts) {
-      const r = resJson as { key: string, owner: string, amount: string }[];
-      return r.map(x => { return { ...x, amount: new TokenAmount(x.amount) }; }) as ListAccountsResponse;
+      const r = resJson as { key: string; owner: string; amount: string }[];
+      return r.map((x) => {
+        return { ...x, amount: new TokenAmount(x.amount) };
+      }) as ListAccountsResponse;
     } else {
       return resJson as ListAccountsIndexedResponse;
     }
@@ -373,21 +386,30 @@ export class CliDriver {
     return res.json() as string[];
   }
 
-
-
-  async listUnspent(minConf: number = 1, maxConf: number = 9999999, addresses: Address[] = [], includeUnsafe: boolean = false, queryOpts: IQueryOptions = {}) {
-    const res = await this.output("listunspent",
+  async listUnspent(
+    minConf: number = 1,
+    maxConf: number = 9999999,
+    addresses: Address[] = [],
+    includeUnsafe: boolean = false,
+    queryOpts: IQueryOptions = {},
+  ) {
+    const res = await this.output(
+      "listunspent",
       minConf.toString(),
       maxConf.toString(),
-      JSON.stringify(addresses.map(x => x.value)),
+      JSON.stringify(addresses.map((x) => x.value)),
       includeUnsafe ? "true" : "false",
       JSON.stringify(queryOpts),
     );
     return res.json() as Unspent[];
   }
 
-  async createRawTransaction(txIns: { txid: string, vout: number }[], txOut: { [address: string]: number }) {
-    const res = await this.output("createrawtransaction",
+  async createRawTransaction(
+    txIns: { txid: string; vout: number }[],
+    txOut: { [address: string]: number },
+  ) {
+    const res = await this.output(
+      "createrawtransaction",
       JSON.stringify(txIns),
       JSON.stringify(txOut),
     );
@@ -395,14 +417,13 @@ export class CliDriver {
   }
 
   async signRawTransactionWithWallet(hexString: string) {
-    const res = await this.output("signrawtransactionwithwallet",
-      hexString
-    );
-    return res.json() as { hex: string, complete: boolean };
+    const res = await this.output("signrawtransactionwithwallet", hexString);
+    return res.json() as { hex: string; complete: boolean };
   }
 
   async sendRawTransaction(hexString: string, feeRate: number = 0) {
-    const res = await this.output("sendrawtransaction",
+    const res = await this.output(
+      "sendrawtransaction",
       hexString,
       feeRate.toFixed(8),
     );
@@ -474,7 +495,7 @@ export class CliDriver {
   async waitForTx(args: TxHash, log = true): Promise<BlockHeight> {
     const writeText = (x: string) => {
       return Deno.stdout.writeSync(new TextEncoder().encode(x));
-    }
+    };
     log && writeText(`wait for tx: ${args.value}`);
     while (true) {
       try {
@@ -519,7 +540,10 @@ export class CliDriver {
     return new TxHash(trimConsoleText(res));
   }
 
-  async logAccountBalances(logToFile: boolean = false, logToConsole: boolean = true): Promise<{ accounts: { [address: string]: string[] }, count: number }> {
+  async logAccountBalances(
+    logToFile: boolean = false,
+    logToConsole: boolean = true,
+  ): Promise<{ accounts: { [address: string]: string[] }; count: number }> {
     const res = await this.output(
       "logaccountbalances",
       logToFile.toString(),
@@ -560,9 +584,12 @@ export class CliDriver {
     return new TxHash(trimConsoleText(res));
   }
 
-  async getAvgFeeRateFromStats(targetHeight: BlockHeight, pastSearchBlockNum: number = 100): Promise<number> {
+  async getAvgFeeRateFromStats(
+    targetHeight: BlockHeight,
+    pastSearchBlockNum: number = 100,
+  ): Promise<number> {
     let stats;
-    let h =  await this.getBlockHeight();
+    let h = await this.getBlockHeight();
     if (targetHeight.value < h.value) {
       h = targetHeight;
     }
@@ -577,7 +604,9 @@ export class CliDriver {
     throw new Error("failed to estimate fee rate");
   }
 
-  async getBlockStats(heightOrHash: BlockHeight | BlockHash): Promise<GetBlockStatsResponse> {
+  async getBlockStats(
+    heightOrHash: BlockHeight | BlockHash,
+  ): Promise<GetBlockStatsResponse> {
     const res = await this.output(
       "getblockstats",
       heightOrHash.value.toString(),
@@ -593,10 +622,10 @@ export class CliDriver {
   }
 
   async estimateSmartFee(blocksCountHintToConfirm: number = 1): Promise<{
-    feerate: number,
-    blocks: number,
-    errors?: string[],
-  }>{
+    feerate: number;
+    blocks: number;
+    errors?: string[];
+  }> {
     const res = await this.output(
       "estimatesmartfee",
       blocksCountHintToConfirm.toString(),
@@ -604,7 +633,11 @@ export class CliDriver {
     return res.json();
   }
 
-  async utxosToAccount(address: Address, amount: number, inputs?: { txid: string, vout: number }[]) {
+  async utxosToAccount(
+    address: Address,
+    amount: number,
+    inputs?: { txid: string; vout: number }[],
+  ) {
     const res = await this.outputString(
       "utxostoaccount",
       JSON.stringify({

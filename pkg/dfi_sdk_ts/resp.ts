@@ -276,15 +276,24 @@ export interface ListTokensItem {
   collateralAddress: string;
 }
 
-
 // TODO: Add other formats
-export type ListAccountsResponses = ListAccountsResponse | ListAccountsIndexedResponse;
+export type ListAccountsResponses =
+  | ListAccountsResponse
+  | ListAccountsIndexedResponse;
 
 export type ListAccountsResponse = ListAccountsResponseItem[];
 export type ListAccountsIndexedResponse = ListAccountsResponseIndexedItem[];
 
-export interface ListAccountsResponseItem { key: string, owner: string, amount: TokenAmount };
-export interface ListAccountsResponseIndexedItem { key: string, owner: string, amount: { [key: string]: number } };
+export interface ListAccountsResponseItem {
+  key: string;
+  owner: string;
+  amount: TokenAmount;
+}
+export interface ListAccountsResponseIndexedItem {
+  key: string;
+  owner: string;
+  amount: { [key: string]: number };
+}
 
 export type GetTokenBalancesResponse =
   | GetTokenBalancesResponseArray
@@ -341,51 +350,50 @@ export interface GetTokenResponse {
 }
 
 export interface Unspent {
-  txid: string
-  vout: number
-  address: string
-  label: string
-  scriptPubKey: string
-  amount: number
-  confirmations: number
-  spendable: boolean
-  solvable: boolean
-  desc: string
-  safe: boolean
+  txid: string;
+  vout: number;
+  address: string;
+  label: string;
+  scriptPubKey: string;
+  amount: number;
+  confirmations: number;
+  spendable: boolean;
+  solvable: boolean;
+  desc: string;
+  safe: boolean;
 }
 
 export interface GetBlockStatsResponse {
-  avgfee: number
-  avgfeerate: number
-  avgtxsize: number
-  blockhash: string
-  feerate_percentiles: number[]
-  height: number
-  ins: number
-  maxfee: number
-  maxfeerate: number
-  maxtxsize: number
-  medianfee: number
-  mediantime: number
-  mediantxsize: number
-  minfee: number
-  minfeerate: number
-  mintxsize: number
-  outs: number
-  subsidy: number
-  swtotal_size: number
-  swtotal_weight: number
-  swtxs: number
-  time: number
-  total_out: number
-  total_size: number
-  total_weight: number
-  totalfee: number
-  txs: number
-  utxo_increase: number
-  utxo_size_inc: number
+  avgfee: number;
+  avgfeerate: number;
+  avgtxsize: number;
+  blockhash: string;
+  feerate_percentiles: number[];
+  height: number;
+  ins: number;
+  maxfee: number;
+  maxfeerate: number;
+  maxtxsize: number;
+  medianfee: number;
+  mediantime: number;
+  mediantxsize: number;
+  minfee: number;
+  minfeerate: number;
+  mintxsize: number;
+  outs: number;
+  subsidy: number;
+  swtotal_size: number;
+  swtotal_weight: number;
+  swtxs: number;
+  time: number;
+  total_out: number;
+  total_size: number;
+  total_weight: number;
+  totalfee: number;
+  txs: number;
+  utxo_increase: number;
+  utxo_size_inc: number;
 }
-
 
 export interface GetNetworkInfoResponse {
   version: number;
