@@ -3,8 +3,8 @@ mod sqlite3_deno
 _default:
     just --list --justfile {{ source_file() }}
 
-# Currently there's no way to iterate through all modules, so we just manually 
-# build up a list
+# Currently there's no way to iterate through all modules,
+# so we just manually build up a list
 modules := "sqlite3_deno"
 
 build:

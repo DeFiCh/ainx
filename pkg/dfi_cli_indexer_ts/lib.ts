@@ -1,7 +1,7 @@
-import { KvStore } from "@pkg/utils_ts/lib.ts";
+import { KvStore, KvStoreWithBlob } from "@pkg/utils_ts/lib.ts";
 
 export class BlockchainStore {
-  constructor(private kv: KvStore<string>) {}
+  constructor(private kv: KvStoreWithBlob<string>) {}
 
   getStore() {
     return this.kv;
@@ -16,7 +16,7 @@ export class BlockchainStore {
   }
 
   async setBlock(hash: string, value: any) {
-    await this.kv.put(this.keyEncode("b/x/" + hash), JSON.stringify(value));
+    await this.kv.putBlob(this.keyEncode("b/x/" + hash), JSON.stringify(value));
   }
 
   async setHeightHash(height: number, hash: string) {
@@ -28,14 +28,14 @@ export class BlockchainStore {
   }
 
   async setTx(txid: string, value: any) {
-    await this.kv.put(this.keyEncode("t/x/" + txid), JSON.stringify(value));
+    await this.kv.putBlob(this.keyEncode("t/x/" + txid), JSON.stringify(value));
   }
 
   async getBlock(heightOrHash: number | string): Promise<any> {
     if (typeof heightOrHash === "string") {
       const hash = heightOrHash;
       return JSON.parse(
-        await this.kv.get(this.keyEncode("b/x/" + hash)) as string,
+        await this.kv.getBlob(this.keyEncode("b/x/" + hash)) as string,
       );
     } else {
       const height = heightOrHash;
@@ -45,7 +45,7 @@ export class BlockchainStore {
   }
 
   async getTx(txid: string) {
-    return JSON.parse(await this.kv.get(this.keyEncode("t/x/" + txid)) as string);
+    return JSON.parse(await this.kv.getBlob(this.keyEncode("t/x/" + txid)) as string);
   }
 
   async getTxHeight(txid: string) {
