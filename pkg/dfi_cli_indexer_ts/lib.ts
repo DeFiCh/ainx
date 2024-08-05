@@ -55,9 +55,9 @@ import { KvStore } from "@pkg/utils_ts/lib.ts";
 // lexicographically sortable  directly strings with 
 // "<str><length>/<num>". Useful to keep numerical sort rather than lexical for numbers.
 export function numericStringEncode(str: string, numSuffix?: number, separator: string = "/"): string {
-  const numStr = numSuffix != null ? numSuffix!.toFixed(0) : "";
+  const numStr = numSuffix != null ? Math.abs(numSuffix!).toFixed(0) : "";
   if (numStr.length) {
-    return str + separator + numStr.length + separator + numStr;
+    return str + separator + (numSuffix! < 0 ? -numStr.length : numStr.length) + separator + numStr;
   }
   return str;
 }

@@ -46,7 +46,9 @@ export class RocksDbStore<K> implements KvStoreWithBlob<K> {
   }
 
   async *iter<V>(k?: K, reverse: boolean = false): AsyncGenerator<{ k: K; v: V }> {
-    const iterOpts = { reverse, gte: k };
+    // Note: Passing k as undefined directly doesn't seems to work if gte key is set, even if
+    // undefined. So we pre-check this. 
+    const iterOpts = k === undefined ? { reverse } : { reverse, gte: k };
     const it = await this.db.iterator(iterOpts);
     for await (const [key, value] of it) {
       yield { k: key, v: this.processOutput ? await this.processOutput(value) as V : value as V };
