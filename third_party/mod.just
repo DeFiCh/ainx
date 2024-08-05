@@ -27,3 +27,6 @@ clean:
     echo "====="
     (set -x; just third_party::${x}::clean)
     done
+
+update:
+    git submodule update --remote
