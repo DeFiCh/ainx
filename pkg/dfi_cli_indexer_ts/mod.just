@@ -31,6 +31,8 @@ install: build
 clean:
     rm -f {{ install_dir }}/bin/{{ pkg_id }}
 
+purge: clean clean_sqlite clean_rocksdb
+
 # quick tasks
 
 run_sqlite *args:
@@ -38,3 +40,10 @@ run_sqlite *args:
 
 run_rocksdb *args:
     just {{ pkg_id }}::run --db=rocksdb --data={{ data_dir }}/data.rocksdb/ {{ args }}
+
+clean_sqlite:
+    rm -f {{ data_dir }}/data.sqlite*
+
+clean_rocksdb:
+    rm -rf {{ data_dir }}/data.rocksdb/
+

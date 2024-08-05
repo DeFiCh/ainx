@@ -17,3 +17,5 @@ lint:
     deno check ./lib.ts && deno fmt --check
 
 clean:
+
+purge: clean

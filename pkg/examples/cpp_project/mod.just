@@ -20,3 +20,5 @@ clean:
 
 test: build
     ctest --test-dir {{build_dir}}
+
+purge: clean

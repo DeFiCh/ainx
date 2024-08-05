@@ -26,3 +26,5 @@ lint:
 
 install: build
     cp -f {{ build_dir }}/{{ build_type }}/{{ pkg_id }} {{ install_dir }}/bin/{{ pkg_id }}
+
+purge: clean
