@@ -1,6 +1,21 @@
 # ainx
 
-The monorepo for everything going forward 
+The monorepo for most things outside of node repo.
+
+## Getting started
+
+- Install [just](https://github.com/casey/just)
+- Make sure to have git installed.
+- Clone repo.
+- `just` for all options.
+- `just workspace::init` to initialize workspace
+- `just <project>::build` to build `<project>`
+- `just <project>::run <args>` to run `<project>`
+- `just <project>` for `<project>` specific options
+
+Note: `<project>::build` may currently fail if you don't have the compiler toolchains installed.
+The eventually goal for `workspace::init` is to also install the required toolchains automatically.
+But we're not there yet. So, make sure to install them manually.
 
 ## Notes
 
@@ -11,12 +26,15 @@ The monorepo for everything going forward
 - `just <project>`: List project's sub-tasks
 - `just <project>::build`: Build `<project>`
 - `just <project>::clean`: Clean-up `<project>`
+- `just <project>::test`: Test `<project>`
 - `just <project>::run`: Run `<project>` with default args
 - `just <project>::fmt`: Format `<project>`
 - `just <project>::lint`: Lint `<project>`
 - `just <project>::install`: Install `<project>` into output sysroot (`.out/`)
+- `just <project>::deps`: Build all project deps (usually called automatically by build)
+- `just <project>::purge`: Cleanup `<project>` including data and logs
 
-Read about [just](https://github.com/casey/just) here. We use it as the common _task_ runner and to specify dependency
+Read about [just](https://github.com/casey/just). We use it as the common _task_ runner and to specify dependency
 rules across projects.
 
 Note that just is very minimal, _not_ a build system like make is, but fixes all other issues with make. Use it to

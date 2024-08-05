@@ -14,4 +14,7 @@ _init_out:
 clean: 
     rm -rf $WORKSPACE_BUILD $WORKSPACE_OUT
 
+purge: clean
+    just third_party::clean
+
 refresh: clean init
