@@ -8,55 +8,55 @@ export class BlockchainStore {
   }
 
   keyEncode(key: string, numSuffix?: number) {
-    return numericStringEncode(key, numSuffix);
+    return lexStringEncode(key, numSuffix);
   }
 
   keyDecode(data: string) {
-    return numericStringDecode(data);
+    return lexStringDecode(data);
   }
 
   async setBlock(hash: string, value: any) {
-    await this.kv.put(this.keyEncode("b/" + hash), JSON.stringify(value));
+    await this.kv.put(this.keyEncode("b/x/" + hash), JSON.stringify(value));
   }
 
   async setHeightHash(height: number, hash: string) {
-    await this.kv.put(this.keyEncode("h", height), hash);
+    await this.kv.put(this.keyEncode("b/h", height), hash);
   }
 
   async setTxHeight(txid: string, height: number) {
-    await this.kv.put(this.keyEncode("t/" + txid + "/h"), height.toString());
+    await this.kv.put(this.keyEncode("t/h/" + txid), height.toString());
   }
 
   async setTx(txid: string, value: any) {
-    await this.kv.put(this.keyEncode("t/" + txid), JSON.stringify(value));
+    await this.kv.put(this.keyEncode("t/x/" + txid), JSON.stringify(value));
   }
 
   async getBlock(heightOrHash: number | string): Promise<any> {
     if (typeof heightOrHash === "string") {
       const hash = heightOrHash;
       return JSON.parse(
-        await this.kv.get(this.keyEncode("b/" + hash)) as string,
+        await this.kv.get(this.keyEncode("b/x/" + hash)) as string,
       );
     } else {
       const height = heightOrHash;
-      const hash = await this.kv.get(this.keyEncode("h", height));
+      const hash = await this.kv.get(this.keyEncode("b/h", height));
       return this.getBlock(hash as string);
     }
   }
 
   async getTx(txid: string) {
-    return JSON.parse(await this.kv.get(this.keyEncode("t/" + txid)) as string);
+    return JSON.parse(await this.kv.get(this.keyEncode("t/x/" + txid)) as string);
   }
 
   async getTxHeight(txid: string) {
-    return Number(await this.kv.get(this.keyEncode("t/" + txid + "/h")));
+    return Number(await this.kv.get(this.keyEncode("t/h/" + txid)));
   }
 }
 
 // A key encoder that optionally takes num suffix and and turns that to
 // lexicographically sortable  directly strings with
 // "<str><length>/<num>". Useful to keep numerical sort rather than lexical for numbers.
-export function numericStringEncode(
+export function lexStringEncode(
   str: string,
   numSuffix?: number,
   separator: string = "/",
@@ -75,7 +75,7 @@ export function numericStringEncode(
 // This part should be the length. If the parsed number and length matches, it's success.
 // We return the string without the last - 1 part.
 // Otherwise, we return the entire string as such.
-export function numericStringDecode(
+export function lexStringDecode(
   str: string,
   separator: string = "/",
 ): string {
@@ -102,7 +102,10 @@ export function numericStringDecode(
 // A key encoder that convert string to bytes, and optionally
 // also takes a num suffix and turns that to bytes directly without interpreting
 // it as string. Useful to keep numerical sort rather than lexical for numbers.
-export function numericByteEncode(str: string, numSuffix?: number): Uint8Array {
+// WARN: We don't use this currently since SQLite won't support more involved 
+// ops like LIKE on binary data. It only works on string. Otherwise, this should
+// a faster method.
+export function lexByteEncode(str: string, numSuffix?: number): Uint8Array {
   const strBuf = new TextEncoder().encode(str);
   const a = new ArrayBuffer(strBuf.byteLength + (numSuffix != null ? 9 : 1));
   new Uint8Array(a).set(strBuf);
@@ -116,7 +119,7 @@ export function numericByteEncode(str: string, numSuffix?: number): Uint8Array {
   return new Uint8Array(a);
 }
 
-export function numericByteDecode(data: Uint8Array): string {
+export function lexByteDecode(data: Uint8Array): string {
   const v = new DataView(data.buffer);
   const hasNum = v.getUint8(v.byteLength - 1);
   if (hasNum) {
