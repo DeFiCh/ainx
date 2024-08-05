@@ -126,10 +126,10 @@ class DataDumper {
     // We just dump the indexes and exit.
     const startKey = args.start == null
       ? undefined
-      : store.keyEncode("h", args.start);
+      : store.keyEncode("b/h", args.start);
     const endKey = args.end == null
       ? undefined
-      : store.keyEncode("h", args.end);
+      : store.keyEncode("b/h", args.end);
     console.log(`dump index: [${startKey}, ${endKey}]`);
     for await (const x of store.getStore().iter(startKey)) {
       if (endKey && x.k > endKey) {
