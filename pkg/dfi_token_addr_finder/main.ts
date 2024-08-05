@@ -5,7 +5,7 @@ import {
   initTimedLogger,
   ListTokensItem,
   TokenAmount,
-} from "@pkg/dfi_sdk_ts/lib.ts";
+} from "@pkg/dfi_cli_sdk_ts/lib.ts";
 
 function loadOpts() {
   const alias = {

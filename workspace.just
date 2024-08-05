@@ -1,5 +1,7 @@
 set shell := ["bash", "-Eeuo", "pipefail", "-c"]
 
+# TODO: workspace pre-req install
+
 default:
     just --list --justfile {{ source_file() }}
 

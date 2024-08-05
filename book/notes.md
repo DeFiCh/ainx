@@ -4,6 +4,19 @@
 
 - Conventional commits: https://gist.github.com/qoomon/5dfcdf8eec66a051ecd85625518cfd13
 
+## Pre-req
+
+- Git
+  - `sudo apt install git`
+- C/C++ compiler toolchain for compiling C/C++ or Rust with sys-libs
+  - `sudo apt install build-essential g++` or `sudo apt install clang clang-tools`
+- Rust toolchain
+  - TODO
+- Just
+  - `cargo binstall just`
+- Deno for TypeScript projects
+  - TODO
+
 ## Where to store data
 
 - For system level data: read `man hier`
@@ -17,7 +30,7 @@
 
 ### Maintainer Info
 
-- Do not accept code that doesn't isn't a good citizen regardless of if it's a quick script or not.
+- Do not accept code that isn't a good citizen regardless of if it's a quick script or not.
   - It's a base responsibility of the developer to adhere to FHS and XDG standards and not hardcode things in random
     places.
 - This may seems like a small issue, but operational infra can make decisions expecting programs to be good citizens.

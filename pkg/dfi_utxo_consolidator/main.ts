@@ -6,7 +6,7 @@ import {
   CliDriver,
   initTimedLogger,
   TxHash,
-} from "@pkg/dfi_sdk_ts/lib.ts";
+} from "@pkg/dfi_cli_sdk_ts/lib.ts";
 import { sleep } from "@x/sleep@v1.3.0/sleep.ts";
 import { parseArgs } from "@std/cli/parse-args";
 

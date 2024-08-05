@@ -1,4 +1,6 @@
 mod examples
-mod dfi_sdk_ts
+mod dfi_cli_sdk_ts
 mod dfi_token_addr_finder
 mod dfi_utxo_consolidator
+mod utils_ts
+mod dfi_cli_indexer_ts
