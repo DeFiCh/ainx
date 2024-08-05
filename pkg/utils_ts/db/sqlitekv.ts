@@ -42,26 +42,38 @@ export class SqliteCore {
   async getStatementValue<K, V>(stmt: Statement, k: K): Promise<V | undefined> {
     const res = stmt.value(k as BindValue);
     if (res && res[0] !== undefined) {
-      return this.processOutput ? await this.processOutput(res[0]) as V : res[0] as V;
+      return this.processOutput
+        ? await this.processOutput(res[0]) as V
+        : res[0] as V;
     }
     return undefined;
   }
 
-  async runStatement<K>(stmt: Statement, k: K[], ...args: unknown[]): Promise<void> {
+  async runStatement<K>(
+    stmt: Statement,
+    k: K[],
+    ...args: unknown[]
+  ): Promise<void> {
     let v = [] as BindValue[];
     if (args.length) {
-      v = await Promise.all(args.map(async v => this.processInput ? await this.processInput(v) : v)) as BindValue[];
+      v = await Promise.all(
+        args.map(async (v) =>
+          this.processInput ? await this.processInput(v) : v
+        ),
+      ) as BindValue[];
     }
     stmt.run(...k as BindValue[], ...v);
   }
 
-  async * iterStatement<K, V>(stmt: Statement, ...args: K[]) {
+  async *iterStatement<K, V>(stmt: Statement, ...args: K[]) {
     for (const { k, v } of stmt.iter(...args as BindValue[])) {
-      yield { k, v: this.processOutput ? await this.processOutput(v) as V : v as V };
+      yield {
+        k,
+        v: this.processOutput ? await this.processOutput(v) as V : v as V,
+      };
     }
   }
 }
-
 
 function generateStatements(
   db: Database,
@@ -75,26 +87,39 @@ function generateStatements(
   v[`get${label}`] = db.prepare(`select v from ${table} where k=? limit 1`);
   v[`put${label}`] = db.prepare(`insert or replace into ${table} values(?, ?)`);
   v[`del${label}`] = db.prepare(`delete from ${table} where k = ?`);
-  v[`delRange${label}`] = db.prepare(`delete from ${table} where k >= ? and k <= ?`);
+  v[`delRange${label}`] = db.prepare(
+    `delete from ${table} where k >= ? and k <= ?`,
+  );
 
   v[`iter${label}`] = db.prepare(`select k,v from ${table}`);
-  v[`iter${label}Desc`] = db.prepare(`select k,v from ${table} order by ${nativeOrderColumn} desc`);
+  v[`iter${label}Desc`] = db.prepare(
+    `select k,v from ${table} order by ${nativeOrderColumn} desc`,
+  );
   v[`iter${label}Filter`] = db.prepare(`select k,v from ${table} where k >= ?`);
-  v[`iter${label}FilterDesc`] = db.prepare(`select k,v from ${table} where k <= ? order by ${nativeOrderColumn} desc`);
+  v[`iter${label}FilterDesc`] = db.prepare(
+    `select k,v from ${table} where k <= ? order by ${nativeOrderColumn} desc`,
+  );
 
   // If it's clustered, everything is ordered by k, we don't need the rest.
   if (isClusteredKey) return v;
 
   v[`iterOrd${label}`] = db.prepare(`select k,v from ${table} order by k`);
-  v[`iterOrd${label}Desc`] = db.prepare(`select k,v from ${table} order by k desc`);
-  v[`iterOrd${label}Filter`] = db.prepare(`select k,v from ${table} where k >= ? order by k`);
-  v[`iterOrd${label}FilterDesc`] = db.prepare(`select k,v from ${table} where k <= ? order by k desc`);
+  v[`iterOrd${label}Desc`] = db.prepare(
+    `select k,v from ${table} order by k desc`,
+  );
+  v[`iterOrd${label}Filter`] = db.prepare(
+    `select k,v from ${table} where k >= ? order by k`,
+  );
+  v[`iterOrd${label}FilterDesc`] = db.prepare(
+    `select k,v from ${table} where k <= ? order by k desc`,
+  );
   return v;
 }
 
 export type KeyType = string | number | Uint8Array;
 
-export class SqliteStore<K extends KeyType> extends SqliteCore implements KvStoreWithBlob<K> {
+export class SqliteStore<K extends KeyType> extends SqliteCore
+  implements KvStoreWithBlob<K> {
   statements: {
     get: Statement;
     put: Statement;
@@ -163,8 +188,8 @@ export class SqliteStore<K extends KeyType> extends SqliteCore implements KvStor
   iter<V>(k?: K, reverse: boolean = false): AsyncGenerator<{ k: K; v: V }> {
     if (reverse) {
       return k == undefined
-      ? this.iterStatement(this.statements.iterDesc)
-      : this.iterStatement(this.statements.iterFilterDesc, k);
+        ? this.iterStatement(this.statements.iterDesc)
+        : this.iterStatement(this.statements.iterFilterDesc, k);
     }
     return k == undefined
       ? this.iterStatement(this.statements.iter)
@@ -188,8 +213,8 @@ export class SqliteStore<K extends KeyType> extends SqliteCore implements KvStor
   iterBlob(k?: K, reverse: boolean = false) {
     if (reverse) {
       return k == undefined
-      ? this.iterStatement(this.statements.iterOrdBlobDesc)
-      : this.iterStatement(this.statements.iterOrdBlobFilterDesc, k);
+        ? this.iterStatement(this.statements.iterOrdBlobDesc)
+        : this.iterStatement(this.statements.iterOrdBlobFilterDesc, k);
     }
     return k == undefined
       ? this.iterStatement(this.statements.iterOrdBlob)

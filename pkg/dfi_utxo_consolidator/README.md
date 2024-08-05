@@ -24,4 +24,5 @@ Options:
 
 ### Quick tasks
 
-- `just dfi_utxo_consolidator::run_cfp_addr`: To consolidate funds in the CFP address
+- `just dfi_utxo_consolidator::run_cfp_addr`: To consolidate funds in the CFP
+  address

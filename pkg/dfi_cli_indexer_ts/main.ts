@@ -7,7 +7,7 @@ import {
   initTimedLogger,
 } from "@pkg/dfi_cli_sdk_ts/lib.ts";
 import { parseArgs } from "@std/cli/parse-args";
-import { SqliteStore, RocksDbStore } from "@pkg/utils_ts/lib.ts";
+import { RocksDbStore, SqliteStore } from "@pkg/utils_ts/lib.ts";
 import { BlockchainStore } from "./lib.ts";
 import { dirname } from "@std/path/dirname";
 
@@ -39,26 +39,29 @@ function loadOpts() {
     text += "Options:\n";
     text += "  -h, --help                   Print this help message\n";
     text += "      --db=<type>              DB type: sqlite, rocksdb\n";
-    text += "  -d, --data=<file-or-dir>     Output file when sqlite, dir rocksdb.\n";
+    text +=
+      "  -d, --data=<file-or-dir>     Output file when sqlite, dir rocksdb.\n";
     text += "  -s, --start=<block_num>      Start block number (0).\n";
-    text += "  -e, --end=<block_num>        End block number. (-1: getblockcount)\n";
-    text += "      --dump                   Dump indexes rather than indexing.\n";
+    text +=
+      "  -e, --end=<block_num>        End block number. (-1: getblockcount)\n";
+    text +=
+      "      --dump                   Dump indexes rather than indexing.\n";
     return text;
   };
   const validate = () => {
-     if (args.db && !["sqlite", "rocksdb"].includes(args.db)) {
-       console.log("Error: invalid db type");
-       return false;
-     }
-     if (args.start &&!Number.isInteger(Number(args.start))) {
-       console.log("Error: invalid start block number");
-       return false;
-     }
-     if (args.end &&!Number.isInteger(Number(args.end))) {
-       console.log("Error: invalid end block number");
-       return false;
-     }
-     return true;
+    if (args.db && !["sqlite", "rocksdb"].includes(args.db)) {
+      console.log("Error: invalid db type");
+      return false;
+    }
+    if (args.start && !Number.isInteger(Number(args.start))) {
+      console.log("Error: invalid start block number");
+      return false;
+    }
+    if (args.end && !Number.isInteger(Number(args.end))) {
+      console.log("Error: invalid end block number");
+      return false;
+    }
+    return true;
   };
   if (args.help || !validate()) {
     console.log(getHelpText());
@@ -75,9 +78,10 @@ function loadOpts() {
     console.log("Error: data required as a file for sqlite, not dir");
     Deno.exit(1);
   }
-  return { db: args.db, 
-    data: args.data, 
-    start: args.start ? Number(args.start) : null, 
+  return {
+    db: args.db,
+    data: args.data,
+    start: args.start ? Number(args.start) : null,
     end: args.end ? Number(args.end) : null,
     dump: args.dump,
   };
@@ -88,15 +92,18 @@ async function main() {
   const args = loadOpts();
 
   const cli = new CliDriver();
-  console.log(`cli: ${cli.path} ${cli.args.join(" ")}, args: ${Deno.inspect(args)}`);
+  console.log(
+    `cli: ${cli.path} ${cli.args.join(" ")}, args: ${Deno.inspect(args)}`,
+  );
 
-  await Deno.mkdir(args.db.startsWith("sqlite") ? 
-      dirname(args.data) : args.data, 
-    { recursive: true });
+  await Deno.mkdir(
+    args.db.startsWith("sqlite") ? dirname(args.data) : args.data,
+    { recursive: true },
+  );
 
-  const kv = args.db.startsWith("sqlite") ? 
-    new SqliteStore<string>(args.data) :
-    new RocksDbStore<string>(args.data);
+  const kv = args.db.startsWith("sqlite")
+    ? new SqliteStore<string>(args.data)
+    : new RocksDbStore<string>(args.data);
 
   const store = new BlockchainStore(kv);
 
@@ -113,11 +120,16 @@ async function main() {
 
 class DataDumper {
   async dump(
-    args: ReturnType<typeof loadOpts>, 
-    store: BlockchainStore) {
+    args: ReturnType<typeof loadOpts>,
+    store: BlockchainStore,
+  ) {
     // We just dump the indexes and exit.
-    const startKey = args.start == null ? undefined : store.keyEncode("h", args.start) ;
-    const endKey = args.end == null ? undefined : store.keyEncode("h", args.end);
+    const startKey = args.start == null
+      ? undefined
+      : store.keyEncode("h", args.start);
+    const endKey = args.end == null
+      ? undefined
+      : store.keyEncode("h", args.end);
     console.log(`dump index: [${startKey}, ${endKey}]`);
     for await (const x of store.getStore().iter(startKey)) {
       if (endKey && x.k > endKey) {
