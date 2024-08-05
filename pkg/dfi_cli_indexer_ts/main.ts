@@ -6,9 +6,8 @@ import {
   GetBlockResponseV4,
   initTimedLogger,
 } from "@pkg/dfi_cli_sdk_ts/lib.ts";
-import { SqliteStore } from "@pkg/utils_ts/lib.ts";
 import { parseArgs } from "@std/cli/parse-args";
-import { KvStore, RocksDbStore } from "@pkg/utils_ts/lib.ts";
+import { SqliteStore, RocksDbStore } from "@pkg/utils_ts/lib.ts";
 import { BlockchainStore } from "./lib.ts";
 import { dirname } from "@std/path/dirname";
 
@@ -26,7 +25,7 @@ function loadOpts() {
     default: {
       db: "sqlite",
     },
-    boolean: ["help"],
+    boolean: ["help", "dump"],
     "--": false,
     unknown: (args) => {
       console.log(`Error: unknown args: ${args}`);
@@ -36,13 +35,14 @@ function loadOpts() {
   const getHelpText = () => {
     let text =
       "Build a DFI index with node's getblock high verbosity mode as source.\n\n";
-    text += "Usage: <program> --output=<string> [flags]\n\n";
+    text += "Usage: <program> --data=<string> [flags]\n\n";
     text += "Options:\n";
     text += "  -h, --help                   Print this help message\n";
     text += "      --db=<type>              DB type: sqlite, rocksdb\n";
     text += "  -d, --data=<file-or-dir>     Output file when sqlite, dir rocksdb.\n";
     text += "  -s, --start=<block_num>      Start block number (0).\n";
     text += "  -e, --end=<block_num>        End block number. (-1: getblockcount)\n";
+    text += "      --dump                   Dump indexes rather than indexing.\n";
     return text;
   };
   const validate = () => {
@@ -77,8 +77,9 @@ function loadOpts() {
   }
   return { db: args.db, 
     data: args.data, 
-    start: Number(args.start) || 0, 
-    end: Number(args.end) || -1 
+    start: args.start ? Number(args.start) : null, 
+    end: args.end ? Number(args.end) : null,
+    dump: args.dump,
   };
 }
 
@@ -99,12 +100,33 @@ async function main() {
 
   const store = new BlockchainStore(kv);
 
-  let end = args.end;
-  if (args.end < 0) {
-    end = (await cli.getBlockHeight()).value;
+  if (args.dump) {
+    await new DataDumper().dump(args, store);
+    return;
   }
 
-  await new DfiCliIndexer().run(cli, store, args.start, end);
+  const start = args.start == null ? 0 : args.start;
+  const end = args.end == null ? (await cli.getBlockHeight()).value : args.end;
+
+  await new DfiCliIndexer().run(cli, store, start, end);
+}
+
+class DataDumper {
+  async dump(
+    args: ReturnType<typeof loadOpts>, 
+    store: BlockchainStore) {
+    // We just dump the indexes and exit.
+    const startKey = args.start == null ? undefined : store.keyEncode("h", args.start) ;
+    const endKey = args.end == null ? undefined : store.keyEncode("h", args.end);
+    console.log(`dump index: [${startKey}, ${endKey}]`);
+    for await (const x of store.getStore().iter(startKey)) {
+      if (endKey && x.k > endKey) {
+        break;
+      }
+      const k = store.keyDecode(x.k);
+      console.log(`${k} (${x.k}): ${x.v}`);
+    }
+  }
 }
 
 class DfiCliIndexer {
