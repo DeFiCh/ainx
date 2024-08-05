@@ -3,6 +3,11 @@ build_dir := shell("echo $WORKSPACE_BUILD")
 install_dir := shell("echo $WORKSPACE_OUT")
 data_dir := install_dir / "var/lib" / pkg_id
 
+# We redirect to the local build. This requires sqlite3 to be built from
+# the deno lib. 
+# TODO: add just file to third-party that does this.
+export DENO_SQLITE_LOCAL := "1"
+
 _default:
     just --list --justfile {{ source_file() }}
 
