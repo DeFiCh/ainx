@@ -18,3 +18,9 @@ install:
     cd {{ third_party_dir }}/{{pkg_id}}
     mkdir -p {{ install_dir }}/lib/{{pkg_id}}
     cp -f build/libsqlite3.so {{ install_dir }}/lib/{{pkg_id}}/libsqlite3.so
+
+clean:
+    #!/bin/env -S bash -Eeuo pipefail
+    cd {{ third_party_dir }}/{{pkg_id}}
+    rm -rf build sqlite
+    rm -rf {{ install_dir }}/lib/{{pkg_id}}

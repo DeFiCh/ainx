@@ -24,3 +24,5 @@ install: build
 
 clean:
     rm -f {{ install_dir }}/bin/{{ pkg_id }}
+
+purge: clean
