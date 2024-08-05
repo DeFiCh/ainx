@@ -5,20 +5,19 @@ data_dir := install_dir / "var/lib" / pkg_id
 
 # We redirect to the local build. This requires sqlite3 to be built from
 # the deno lib. 
-# TODO: add just file to third-party that does this.
-export DENO_SQLITE_LOCAL := "1"
+export DENO_SQLITE_PATH := install_dir / "lib/sqlite3_deno/libsqlite3.so"
 
 _default:
     just --list --justfile {{ source_file() }}
 
 deps:
-    just dfi_cli_sdk_ts::lint
-    just utils_ts::lint
+    just dfi_cli_sdk_ts::build
+    just utils_ts::build
 
-build:
+build: deps
     deno compile --output={{ install_dir }}/bin/ -A ./main.ts 
 
-run *args:
+run *args: deps
     deno run --unstable-ffi -A ./main.ts {{ args }}
 
 fmt:

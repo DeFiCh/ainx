@@ -1,0 +1,4 @@
+[submodule "third_party/sqlite3_deno"]
+	path = third_party/sqlite3_deno
+	url = https://github.com/prasannavl/sqlite3
+	branch = pvl/iter

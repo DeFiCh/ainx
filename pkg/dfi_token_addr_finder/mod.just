@@ -6,12 +6,12 @@ _default:
     just --list --justfile {{ source_file() }}
 
 deps:
-    just dfi_cli_sdk_ts::lint
+    just dfi_cli_sdk_ts::build
 
-build:
+build: deps
     deno compile --output={{ install_dir }}/bin/ -A ./main.ts 
 
-run *args:
+run *args: deps
     deno run -A ./main.ts {{ args }}
 
 fmt:

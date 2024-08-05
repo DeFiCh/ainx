@@ -5,7 +5,10 @@ install_dir := shell("echo $WORKSPACE_OUT")
 _default:
     just --list --justfile {{ source_file() }}
 
-build: lint
+deps:
+    just third_party::sqlite3_deno::install
+
+build: deps
 
 fmt:
     deno fmt

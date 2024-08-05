@@ -10,6 +10,8 @@ export WORKSPACE_ROOT := justfile_directory()
 export WORKSPACE_BUILD := WORKSPACE_ROOT + "/.build"
 # Out dir with unix layout for final outputs
 export WORKSPACE_OUT := WORKSPACE_ROOT + "/.out"
+# Third party dir
+export WORKSPACE_THIRD_PARTY := WORKSPACE_ROOT + "/third_party"
 
 # direct flat import
 import "pkg/mod.just"

@@ -1,5 +1,4 @@
-import { BindValue, Database, Statement } from "@ext/deno_sqlite3/mod.ts";
-import { KvStore } from "@pkg/utils_ts/lib.ts";
+import { BindValue, Database, Statement } from "@ext/sqlite3_deno/mod.ts";
 import { KvStoreWithBlob } from "@pkg/utils_ts/kv.ts";
 
 export class SqliteCore {

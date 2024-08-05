@@ -7,12 +7,12 @@ _default:
     just --list --justfile {{ source_file() }}
 
 deps:
-    just dfi_cli_sdk_ts::lint
+    just dfi_cli_sdk_ts::build
 
-build:
+build: deps
     deno compile --output={{ install_dir }}/bin/ -A ./main.ts 
 
-run *args:
+run *args: deps
     deno run -A ./main.ts {{ args }}
 
 fmt:
@@ -34,7 +34,7 @@ purge: clean clean clean_logs
 # quick tasks
 
 run_cfp_addr: 
-    #!/bin/bash
+    #!/bin/env -S bash -Eeuo pipefail
     log_file={{ logs_dir }}/{{ datetime_utc("%F-u%s.log") }}
     mkdir -p $(dirname ${log_file})
     just {{ pkg_id }}::run --addr="dZcHjYhKtEM88TtZLjp314H2xZjkztXtRc" \

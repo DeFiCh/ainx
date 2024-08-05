@@ -5,7 +5,7 @@ install_dir := shell("echo $WORKSPACE_OUT")
 _default:
     just --list --justfile {{ source_file() }}
 
-build: lint
+build:
 
 fmt:
     deno fmt
