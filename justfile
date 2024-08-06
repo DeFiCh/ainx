@@ -15,12 +15,17 @@ export WORKSPACE_THIRD_PARTY := WORKSPACE_ROOT + "/third_party"
 
 # direct flat import
 import "pkg/mod.just"
+import? "org/pkg/mod.just"
 
 # import as modules
+
 mod infra
 mod book
 mod third_party
 mod workspace
+
+mod? org
+mod? user
 
 _default:
     just --list
