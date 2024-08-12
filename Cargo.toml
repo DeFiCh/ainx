@@ -1,5 +1,9 @@
 [workspace]
-members = [ "pkg/examples/rust_project", "pkg/examples/rust_project_with_deps"]
+
+members = [ 
+    "pkg/examples/rust_project", 
+    "pkg/examples/rust_project_with_deps"
+    ]
 resolver = "2"
 
 [workspace.dependencies]

@@ -2,7 +2,7 @@
   "imports": {
     "@esm/": "https://esm.sh/",
     "@pkg/": "./pkg/",
-    "@ext/": "./third_party/",
+    "@ext/": "./ext/",
     "@std/assert": "jsr:@std/assert@^1.0.0",
     "@std/async": "jsr:@std/async@^1.0.0",
     "@std/cli": "jsr:@std/cli@^1.0.0",

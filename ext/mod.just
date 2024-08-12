@@ -11,21 +11,21 @@ build:
     #!/bin/env -S bash -Eeuo pipefail
     for x in {{ modules }}; do
     echo "====="
-    (set -x; just third_party::${x}::build)
+    (set -x; just ext::${x}::build)
     done
 
 install:
     #!/bin/env -S bash -Eeuo pipefail
     for x in {{ modules }}; do
     echo "====="
-    (set -x; just third_party::${x}::install)
+    (set -x; just ext::${x}::install)
     done
 
 clean:
     #!/bin/env -S bash -Eeuo pipefail
     for x in {{ modules }}; do
     echo "====="
-    (set -x; just third_party::${x}::clean)
+    (set -x; just ext::${x}::clean)
     done
 
 update:

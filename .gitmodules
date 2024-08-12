@@ -1,10 +1,4 @@
-[submodule "org"]
-	path = org
-	url = ssh://git@github.com/DeFiCh/org
-[submodule "user"]
-	path = user
-	url = ssh://git@github.com/DeFiCh/user
-[submodule "third_party/sqlite3_deno"]
-	path = third_party/sqlite3_deno
+[submodule "ext/sqlite3_deno"]
+	path = ext/sqlite3_deno
 	url = https://github.com/prasannavl/sqlite3
 	branch = pvl/iter

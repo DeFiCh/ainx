@@ -1,6 +1,6 @@
-# third_party
+# ext / third_party
 
-This is the repo for third party code.
+This is the repo for third party code or other external and archived zones.
 
 - All third_party code is organized here, be it forks or copy of licensed code.
 - Forks are managed as git submodules.

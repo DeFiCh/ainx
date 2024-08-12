@@ -6,7 +6,7 @@ _default:
     just --list --justfile {{ source_file() }}
 
 deps:
-    just third_party::sqlite3_deno::install
+    just ext::sqlite3_deno::install
 
 build: deps
 
